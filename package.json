@@ -6,10 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Thomas Hochörtler <hochitom@me.com>",
   "license": "ISC",
   "dependencies": {
     "minimist": "^1.1.0",
     "mkpath": "^0.1.0"
-  }
+  },
+  "repository": {
+   "type": "git",
+   "url": "git://github.com/hochitom/image-grabber.git"
+ }
 }
