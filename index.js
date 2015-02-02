@@ -3,7 +3,6 @@
 var fs = require('fs');
 var http = require('http');
 var mkpath = require('mkpath');
-var argv = require('minimist')(process.argv.slice(2));
 
 function splitInput (input) {
     input = input.split('/');
@@ -19,10 +18,8 @@ function splitInput (input) {
     return output;
 };
 
-var conf = splitInput(argv.f);
-
-function grabImage() {
-    var f = fs.createWriteStream(__dirname + '/data/' + conf.host + '/' + conf.file.replace('.', '_') + '_' + Date.now() + '.jpg');
+function grabImage (conf, folder) {
+    var f = fs.createWriteStream(__dirname + '/data/' + folder + '/' + conf.file.replace('.', '_') + '_' + Date.now() + '.jpg');
 
     var options = {
         host: conf.host,
@@ -30,27 +27,35 @@ function grabImage() {
         path: '/' + conf.folder + conf.file
     };
 
-    http.get(options,function(res){
+    http.get(options, function (res) {
         res.on('data', function (chunk) {
             f.write(chunk);
         });
 
-        res.on('end',function() {
+        res.on('end', function () {
             f.end();
             console.log(new Date() + ': saved "' + conf.file +'" from '+ conf.host);
         });
     });
 };
 
-function startService () {
-    mkpath('data/' + conf.host, function (err) {
+function startService (opts) {
+    var conf = splitInput(opts.file);
+    var folder = opts.folder || conf.host;
+
+    mkpath('data/' + folder, function (err) {
         if (err) throw err;
 
-        console.log('Directory structure "data/' + conf.host + '" created');
+        console.log('Directory structure "data/' + folder + '" created');
 
-        setInterval(grabImage, 300000);
-        grabImage();
+        setInterval(function () {
+            return grabImage(conf);
+        }, 300000);
+
+        grabImage(conf, folder);
     });
 };
 
-module.exports = startService();
+module.exports = function (opts) {
+    startService(opts);
+};
