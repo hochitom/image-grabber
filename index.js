@@ -5,19 +5,29 @@ var http = require('http');
 var mkpath = require('mkpath');
 var argv = require('minimist')(process.argv.slice(2));
 
-var counter = 0;
-var host = argv.h;
-var file = argv.f;
-var folder = argv.d || '';
+function splitInput (input) {
+    input = input.split('/');
+
+    if (input[0] === 'http:') input.splice(0, 1);
+    if (input[0] === '') input.splice(0, 1);
+
+    var output = {};
+    output.host = input.splice(0,1)[0];
+    output.file = input.splice(input.length - 1, 1)[0];
+    output.path = input.join('/');
+
+    return output;
+};
+
+var conf = splitInput(argv.f);
 
 function grabImage() {
-    counter++;
-    var f = fs.createWriteStream(__dirname + '/data/' + host + '/' + file.replace('.', '_') + '_' + Date.now() + '.jpg');
+    var f = fs.createWriteStream(__dirname + '/data/' + conf.host + '/' + conf.file.replace('.', '_') + '_' + Date.now() + '.jpg');
 
     var options = {
-        host: host,
+        host: conf.host,
         port: 80,
-        path: '/' + folder + file
+        path: '/' + conf.folder + conf.file
     };
 
     http.get(options,function(res){
@@ -27,16 +37,20 @@ function grabImage() {
 
         res.on('end',function() {
             f.end();
-            console.log(new Date() + ': saved "' + file +'" from '+ host + ' #' + counter);
+            console.log(new Date() + ': saved "' + conf.file +'" from '+ conf.host);
         });
     });
 };
 
-mkpath('data/' + host, function (err) {
-    if (err) throw err;
-    
-    console.log('Directory structure "data/' + host + '" created');
+function startService () {
+    mkpath('data/' + conf.host, function (err) {
+        if (err) throw err;
 
-    setInterval(grabImage, 300000);
-    grabImage();
-});
+        console.log('Directory structure "data/' + conf.host + '" created');
+
+        setInterval(grabImage, 300000);
+        grabImage();
+    });
+};
+
+module.exports = startService();
