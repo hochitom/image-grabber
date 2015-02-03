@@ -16,6 +16,12 @@ function splitInput (input) {
     output.file = input.splice(input.length - 1, 1)[0];
     output.path = input.join('/');
 
+    if (output.path !== '') {
+        output.path = '/' + output.path + '/';
+    } else {
+        output.path = '/';
+    }
+
     return output;
 };
 
@@ -25,7 +31,7 @@ function grabImage (conf, folder) {
     var options = {
         host: conf.host,
         port: 80,
-        path: '/' + conf.folder + conf.file
+        path: conf.path + conf.file
     };
 
     http.get(options, function (res) {
