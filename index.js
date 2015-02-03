@@ -3,6 +3,7 @@
 var fs = require('fs');
 var http = require('http');
 var mkpath = require('mkpath');
+var CronJob = require('cron').CronJob
 
 function splitInput (input) {
     input = input.split('/');
@@ -48,11 +49,25 @@ function startService (opts) {
 
         console.log('Directory structure "data/' + folder + '" created');
 
-        setInterval(function () {
-            return grabImage(conf);
-        }, 300000);
+        var time = opts.time ? opts.time.split(":") : ["12","0","0"];
+        var days = opts.days || "0-6";
+        var day = opts.day || '*';
+        var month = opts.month || '*';
 
-        grabImage(conf, folder);
+        var cronTimeVars = [time[2], time[1], time[0], day, month, days];
+        var cronTime = cronTimeVars.join(' ');
+        console.log(cronTime);
+
+        var job = new CronJob({
+            cronTime: cronTime,
+            onTick: function() {
+                grabImage(conf, folder);
+            },
+            start: false,
+            timeZone: "Europe/Vienna"
+        });
+
+        job.start();
     });
 };
 

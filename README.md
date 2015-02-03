@@ -12,4 +12,9 @@ node cli.js -f http://www.ochnerbauer.at/webcam/webcam.jpg -d someFolderName
 ```
 
 -f Link to an image (required)
--d Name of the folder where the images will be stored (optional)
+-p Name of the folder where the images will be stored (optional)
+-t Time when the image will be grabbed (optional, Default: 12:00:00, Format: hh:mm:ss)
+-w Weekdays when the image will be grabbed (optional, Default: 0-6)
+-d Specific Day of month (optional, Options: 1-31)
+-m Specific Month (optional, Options: 0-11)
+-z Timezone (optional, Default: Europe/Vienna)
