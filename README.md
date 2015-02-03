@@ -11,10 +11,12 @@ npm install
 node cli.js -f http://www.ochnerbauer.at/webcam/webcam.jpg -d someFolderName
 ```
 
--f Link to an image (required)
--p Name of the folder where the images will be stored (optional)
--t Time when the image will be grabbed (optional, Default: 12:00:00, Format: hh:mm:ss)
--w Weekdays when the image will be grabbed (optional, Default: 0-6)
--d Specific Day of month (optional, Options: 1-31)
--m Specific Month (optional, Options: 0-11)
--z Timezone (optional, Default: Europe/Vienna)
+<ul>
+<li><strong>f</strong> Link to an image (required)</li>
+<li><strong>p</strong> Name of the folder where the images will be stored (optional)</li>
+<li><strong>t</strong> Time when the image will be grabbed (optional, Default: 12:00:00, Format: hh:mm:ss)</li>
+<li><strong>w</strong> Weekdays when the image will be grabbed (optional, Default: 0-6)</li>
+<li><strong>d</strong> Specific Day of month (optional, Options: 1-31)</li>
+<li><strong>m</strong> Specific Month (optional, Options: 0-11)</li>
+<li><strong>z</strong> Timezone (optional, Default: Europe/Vienna)</li>
+</ul>
