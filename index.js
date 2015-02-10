@@ -50,7 +50,7 @@ function startService (opts) {
     var conf = splitInput(opts.file);
     var folder = opts.folder || conf.host;
 
-    mkpath('data/' + folder, function (err) {
+    mkpath('data/' + folder, 0777, function (err) {
         if (err) throw err;
 
         console.log('Directory structure "data/' + folder + '" created');
